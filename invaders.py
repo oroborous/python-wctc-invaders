@@ -291,7 +291,7 @@ class GameLayer(cocos.layer.Layer):
         self.create_swarm(100, 300)
 
         # start game loop
-        self.schedule(self.update)
+        self.schedule(self.game_loop)
 
     # create player cannon at center-bottom of screen
     def create_player(self):
@@ -305,7 +305,7 @@ class GameLayer(cocos.layer.Layer):
         self.hud.update_score(self.score)
 
     # the game loop
-    def update(self, delta_time):
+    def game_loop(self, delta_time):
         # clear collision manager
         self.collman.clear()
         for _, actor in self.children:
@@ -362,7 +362,7 @@ class GameLayer(cocos.layer.Layer):
         # stop the game loop if out of lives
         if self.lives < 0:
             # stop the game loop by unscheduling the function
-            self.unschedule(self.update)
+            self.unschedule(self.game_loop)
             # tell HUD to show Game Over label
             self.hud.show_game_over('Game Over')
         else:
