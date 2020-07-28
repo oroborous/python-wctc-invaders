@@ -55,8 +55,7 @@ class Actor(cocos.sprite.Sprite):
 
 class PlayerCannon(Actor):
     def __init__(self, x, y):
-        super(PlayerCannon, self) \
-            .__init__('img/cannon.png', x, y)
+        super(PlayerCannon, self).__init__('img/cannon.png', x, y)
         self.speed = eu.Vector2(200, 0)
 
     def collide(self, other):
