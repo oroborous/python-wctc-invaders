@@ -115,6 +115,9 @@ class AlienColumn:
         # self.aliens = [Alien.from_type(x, y + i * 60, alien_type, self)
         #               for i, alien_type in alien_types]
 
+    def has_aliens(self):
+        return len(self.aliens) > 0
+
     # remove a destroyed alien from the column
     def remove(self, alien):
         self.aliens.remove(alien)
@@ -156,6 +159,9 @@ class Swarm:
         self.elapsed = 0.0
         self.period = 1.0
 
+    def increase_difficulty(self):
+        self.period *= 0.5
+
     # iterate the list of columns
     # pass each column (as c) to an anonymous function that
     # calls the column's should_turn method
@@ -163,6 +169,12 @@ class Swarm:
     def side_reached(self):
         return any(map(lambda c: c.should_turn(self.direction),
                        self.columns))
+
+    def has_aliens(self):
+        for column in self.columns:
+            if len(column.aliens) > 0:
+                return True
+        return False
 
     # iterator to easily iterate all aliens in all columns
     def __iter__(self):
@@ -300,8 +312,17 @@ class GameLayer(cocos.layer.Layer):
 
     # when the player earns points, this method adds them to the score
     def update_score(self, points=0):
+        level = self.score // 150
         self.score += points
+        new_level = self.score // 150
+
+        if new_level > level:
+            self.swarm.increase_difficulty()
+
+
         self.hud.update_score(self.score)
+
+
 
     # the game loop
     def game_loop(self, delta_time):
@@ -341,6 +362,7 @@ class GameLayer(cocos.layer.Layer):
             actor.update(delta_time)
 
         self.swarm.update(delta_time)
+
 
     # test every object for collisions against the given actor
     def collide(self, actor):
