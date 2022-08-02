@@ -40,7 +40,7 @@ class MainLayer(cocos.layer.Layer):
         self.schedule(self.update)
 
     def update(self, delta_time):
-        #print(delta_time)
+        print(delta_time)
 
         # clear the collision manager
         self.collman.clear()

@@ -72,7 +72,8 @@ class PlayerCannon(Actor):
 
         # ensure the center of the cannon (its anchor point) doesn't
         # move closer than half its width toward either screen edge
-        if half_width <= self.x <= self.parent.width - half_width:
+        if horizontal_movement == -1 and half_width <= self.x or \
+                horizontal_movement == 1 and self.x <= self.parent.width - half_width:
             self.move(self.speed * horizontal_movement * delta_time)
 
         # is the player firing the laser?
@@ -319,10 +320,7 @@ class GameLayer(cocos.layer.Layer):
         if new_level > level:
             self.swarm.increase_difficulty()
 
-
         self.hud.update_score(self.score)
-
-
 
     # the game loop
     def game_loop(self, delta_time):
@@ -362,7 +360,6 @@ class GameLayer(cocos.layer.Layer):
             actor.update(delta_time)
 
         self.swarm.update(delta_time)
-
 
     # test every object for collisions against the given actor
     def collide(self, actor):
